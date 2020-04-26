@@ -19,4 +19,4 @@ app.get('/api/justone', (req, res) => {
 
 app.get('/', (req, res) => res.sendFile('index.html'));
 
-app.listen(port, () => console.log(`XYZ listening at http://localhost:${port}`))
+app.listen(port, '0.0.0.0', () => console.log(`XYZ listening at http://0.0.0.0:${port}`))

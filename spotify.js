@@ -1,6 +1,9 @@
 const axios = require('axios');
-var moment = require('moment');
-var fs = require('fs');
+const moment = require('moment');
+const fs = require('fs');
+const SocksProxyAgent = require('socks-proxy-agent');
+
+const socksAgent = new SocksProxyAgent('socks5://localhost:1080');
 
 const VEC_PARAMS = ["energy", "valence"];
 
@@ -13,7 +16,9 @@ async function authorize() {
             headers: {
                 Authorization: CLIENT_AUTH,
                 'Content-Type': 'application/x-www-form-urlencoded',
-            }
+            },
+            httpAgent: socksAgent,
+            httpsAgent: socksAgent,
         });
         authorization = {
             header: { "Authorization": "Bearer " + res.data.access_token},
@@ -32,7 +37,9 @@ async function generateDays(startSeed, endSeed, days) {
         headers: authorization.header,
         params: {
             "ids": `${startSeed.id},${endSeed.id}`
-        }
+        },      
+        httpAgent: socksAgent,
+        httpsAgent: socksAgent,
     });
     const startVec = VEC_PARAMS.map(v => res.data.audio_features[0][v]);
     const endVec = VEC_PARAMS.map(v => res.data.audio_features[1][v]);
@@ -59,7 +66,9 @@ async function generateDays(startSeed, endSeed, days) {
             params: Object.assign(targetParams, {
                 "seed_tracks": `${startSeed.id},${endSeed.id}`,
                 "limit": 10,
-            })
+            }),
+            httpAgent: socksAgent,
+            httpsAgent: socksAgent,
         });
 
         console.log(`Creating playlist for day ${d + 1}...`);
