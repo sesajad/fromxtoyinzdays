@@ -24,14 +24,12 @@ async function authorize() {
             header: { "Authorization": "Bearer " + res.data.access_token},
             expire: moment().unix() + 3500, // its 3600 btw
         }
-        console.log('hooray!', authorization);
+        console.log('renewing authorization ', authorization);
     }
 }
 
 async function generateDays(startSeed, endSeed, days) {
     await authorize();
-
-    console.log("Initiating...");
 
     const res = await axios.get("https://api.spotify.com/v1/audio-features/",  {
         headers: authorization.header,
@@ -71,7 +69,6 @@ async function generateDays(startSeed, endSeed, days) {
             httpsAgent: socksAgent,
         });
 
-        console.log(`Creating playlist for day ${d + 1}...`);
         retVal.days[d].tracks = res.data.tracks.map(x => { return {
             url: x.href, 
             name: x.name, 
@@ -83,7 +80,6 @@ async function generateDays(startSeed, endSeed, days) {
         }});
     }
     
-    console.dir(retVal, { depth: null } );
     return retVal;
 }
 
