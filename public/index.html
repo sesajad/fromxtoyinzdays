@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <!-- Site Properties -->
+  <title>From X to Y in Z days - Spotify</title>
+
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+  <style type="text/css">
+
+  body {
+    background-color: #FFFFFF;
+  }
+  .main.container {
+    margin-top: 2em;
+  }
+
+  .main.menu {
+    margin-top: 4em;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    transition:
+      box-shadow 0.5s ease,
+      padding 0.5s ease
+    ;
+  }
+  .main.menu .item img.logo {
+    margin-right: 1.5em;
+  }
+
+  .overlay {
+    float: left;
+    margin: 0em 3em 1em 0em;
+  }
+  .overlay .menu {
+    position: relative;
+    left: 0;
+    transition: left 0.5s ease;
+  }
+
+  .main.menu.fixed {
+    background-color: #FFFFFF;
+    border: 1px solid #DDD;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+  }
+  .overlay.fixed .menu {
+    left: 800px;
+  }
+
+  .text.container .left.floated.image {
+    margin: 2em 2em 2em -4em;
+  }
+  .text.container .right.floated.image {
+    margin: 2em -4em 2em 2em;
+  }
+
+  .ui.footer.segment {
+    margin: 5em 0em 0em;
+    padding: 5em 0em;
+  }
+  </style>
+
+  <script>
+    $(function() {
+      $('#gen-form').on("submit",function(e) {
+          e.preventDefault(); 
+          $("#dimmer").addClass("active");
+          const from = $("#from").val().substring($("#from").val().lastIndexOf('/') + 1);
+          const to = $("#to").val().substring($("#to").val().lastIndexOf('/') + 1);
+          $.get("/api/justone", {from: from, to: to, days: $("#days").val()},  function(data) {
+            console.log(data);
+            const htmlVal = data.days.map((x, i) => 
+            `<h1>Day ${i + 1}</h1>` + 
+            `<div id="day-${i + 1}" class="ui link cards" >` + x.tracks.map(y => 
+                `<a class="card" href="${y.url}">
+                  <div class="image">
+                    <img src="${y.album.imageUrl}">
+                  </div>
+                  <div class="content">
+                    <div class="header">${y.name}</div>
+                    <div class="meta">
+                      Album: ${y.album.name}
+                    </div>
+                    <div class="description">
+                      ${y.artist}
+                    </div>
+                  </div>
+                </a>`
+              ).join('\n') + 
+            `</div>`
+            ).join('\n\n');
+            
+          $("#content").html(htmlVal);
+          $("#dimmer").removeClass("active");
+          });
+      });
+    });
+  </script>
+
+</head>
+<body>
+
+  <div class="ui main text container">
+    <h1 class="ui header">From X to Y in Z days with Spotify</h1>
+    <p>made with nothing, dedicated to Arya Hadi</p>
+
+    <p>select two songs (representing two moods), and duration (in days) to have a path from a mood to another mood.</p>
+    <p>Default values are for an example from "Melancholy Man" by "The Moody Blues" to "Keesh" by "Sepideh" in 7 days</p>
+    <form id="gen-form" class="ui form">
+        <div class="three fields">
+            <div class="field">
+              <label>From</label>
+              <input id="from" type="url" name="from" placeholder="Like https://open.spotify.com/track/1NeQzAqahRYI09bgLbhVFN" value="https://open.spotify.com/track/1NeQzAqahRYI09bgLbhVFN" />
+            </div>
+            <div class="field">
+                <label>To</label>
+                <input id="to" type="url" name="to" placeholder="Like https://open.spotify.com/track/57YSF5rP2vEVoX2bpAxQw7" value="https://open.spotify.com/track/57YSF5rP2vEVoX2bpAxQw7"/>
+            </div>
+            <div class="field">
+                <label>Days</label>
+                <input id="days" type="number" name="days" placeholder="Like 7" value="7" />
+            </div>
+        </div>
+       <button class="ui primary button" type="submit">Go</button>
+    </form>
+
+    <div id="content">
+    </div>
+
+    <div id="dimmer" class="ui dimmer">
+        <div class="ui loader"></div>
+    </div>
+    
+    <div class="ui divider"></div>
+
+    <p><b>How does it work?</b> <br/> we linearly traverse in representation space from a song to another, and recommend song for each day, using start and end points as seed, but targetting representation vector of the day. </p>
+
+    <div class="ui divider"></div>
+
+    <p>Copyright? are you serious? By the way, I'm Sajad, Seyed Sajad Kahani</p>
+    <p>And I'm <a href="https://twitter.com/UnofficialSajad">@UnofficialSajad</a> in Twitter</p>
+
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "fromxtoyinzdays",
+  "version": "1.0.0",
+  "description": "Dedicated to Arya Hadi",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sajad",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "express": "^4.17.1",
+    "moment": "^2.24.0"
+  }
+}
