@@ -4,7 +4,7 @@ var fs = require('fs');
 
 const VEC_PARAMS = ["energy", "valence"];
 
-const CLIENT_AUTH = 'Basic ' + new Buffer(fs.readFileSync('DATA', 'utf8').trim()).toString('base64');;
+const CLIENT_AUTH = 'Basic ' + new Buffer(fs.readFileSync('./secret/client', 'utf8').trim()).toString('base64');;
 var authorization = null;
 
 async function authorize() {
