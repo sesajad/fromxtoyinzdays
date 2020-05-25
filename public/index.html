@@ -75,7 +75,7 @@
           $("#dimmer").addClass("active");
           const from = $("#from").val().substring($("#from").val().lastIndexOf('/') + 1);
           const to = $("#to").val().substring($("#to").val().lastIndexOf('/') + 1);
-          $.get("/api/justone", {from: from, to: to, days: $("#days").val()},  function(data) {
+          $.get("api/justone", {from: from, to: to, days: $("#days").val()},  function(data) {
             console.log(data);
             const htmlVal = data.days.map((x, i) => 
             `<h1>Day ${i + 1}</h1>` + 
