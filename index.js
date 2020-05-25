@@ -1,7 +1,7 @@
 const express = require('express');
 const spotify = require('./spotify');
 const app = express();
-const port = 1399;
+const port = 8001;
 
 app.use(express.static('public'));
 
@@ -19,4 +19,4 @@ app.get('/api/justone', (req, res) => {
 
 app.get('/', (req, res) => res.sendFile('index.html'));
 
-app.listen(port, '0.0.0.0', () => console.log(`XYZ listening at http://0.0.0.0:${port}`))
+app.listen(port, '127.0.0.1', () => console.log(`XYZ listening at http://127.0.0.1:${port}`))

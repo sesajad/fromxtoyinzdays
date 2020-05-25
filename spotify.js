@@ -2,8 +2,11 @@ const axios = require('axios');
 const moment = require('moment');
 const fs = require('fs');
 const SocksProxyAgent = require('socks-proxy-agent');
+const http = require('http');
+const https = require('https');
 
-const socksAgent = new SocksProxyAgent('socks5://localhost:1080');
+const httpAgent = new http.Agent(); // new SocksProxyAgent('socks5://localhost:1080');
+const httpsAgent = new https.Agent(); // new SocksProxyAgent('socks5://localhost:1080');
 
 const VEC_PARAMS = ["energy", "valence"];
 
@@ -17,8 +20,8 @@ async function authorize() {
                 Authorization: CLIENT_AUTH,
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            httpAgent: socksAgent,
-            httpsAgent: socksAgent,
+            httpAgent: httpAgent,
+            httpsAgent: httpsAgent,
         });
         authorization = {
             header: { "Authorization": "Bearer " + res.data.access_token},
@@ -36,8 +39,8 @@ async function generateDays(startSeed, endSeed, days) {
         params: {
             "ids": `${startSeed.id},${endSeed.id}`
         },      
-        httpAgent: socksAgent,
-        httpsAgent: socksAgent,
+        httpAgent: httpAgent,
+        httpsAgent: httpsAgent,
     });
     const startVec = VEC_PARAMS.map(v => res.data.audio_features[0][v]);
     const endVec = VEC_PARAMS.map(v => res.data.audio_features[1][v]);
@@ -65,8 +68,8 @@ async function generateDays(startSeed, endSeed, days) {
                 "seed_tracks": `${startSeed.id},${endSeed.id}`,
                 "limit": 10,
             }),
-            httpAgent: socksAgent,
-            httpsAgent: socksAgent,
+            httpAgent: httpAgent,
+            httpsAgent: httpsAgent,
         });
 
         retVal.days[d].tracks = res.data.tracks.map(x => { return {
