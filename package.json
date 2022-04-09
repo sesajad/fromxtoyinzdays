@@ -11,7 +11,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "express": "^4.17.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "socks-proxy-agent": "^5.0.0"
   }
 }
