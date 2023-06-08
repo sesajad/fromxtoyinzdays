@@ -9,7 +9,7 @@
   "author": "Sajad",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^1.4.0",
     "express": "^4.17.3",
     "moment": "^2.24.0",
     "socks-proxy-agent": "^5.0.0"
